@@ -10,6 +10,33 @@ use PublishingKit\HttpProxy\Store\Psr6Store;
 
 final class Psr6StoreTest extends SimpleTestCase
 {
+    public function testHasEmpty()
+    {
+        $cache = m::mock('Psr\Cache\CacheItemPoolInterface');
+        $cache->shouldReceive('getItem')->andReturn($cache);
+        $cache->shouldReceive('isHit')->andReturn(false);
+        $store = new Psr6Store($cache);
+        $request = m::mock('Psr\Http\Message\ServerRequestInterface');
+        $request->shouldReceive('getUri')->andReturn($request);
+        $request->shouldReceive('getPath')->andReturn('/foo');
+        $request->shouldReceive('getQuery')->andReturn('');
+        $this->assertFalse($store->has($request));
+    }
+
+    public function testHasNotEmpty()
+    {
+        $cache = m::mock('Psr\Cache\CacheItemPoolInterface');
+        $cache->shouldReceive('getItem')->andReturn($cache);
+        $cache->shouldReceive('isHit')->andReturn(true);
+        $cache->shouldReceive('get')->andReturn('foo');
+        $store = new Psr6Store($cache);
+        $request = m::mock('Psr\Http\Message\ServerRequestInterface');
+        $request->shouldReceive('getUri')->andReturn($request);
+        $request->shouldReceive('getPath')->andReturn('/foo');
+        $request->shouldReceive('getQuery')->andReturn('');
+        $this->assertTrue($store->has($request));
+    }
+
     public function testGetEmpty()
     {
         $cache = m::mock('Psr\Cache\CacheItemPoolInterface');

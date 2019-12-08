@@ -21,6 +21,13 @@ final class Psr6Store implements StoreInterface
         $this->cache = $cache;
     }
 
+    public function has(ServerRequestInterface $request): bool
+    {
+        $key = $this->getCacheKey($request);
+        $item = $this->cache->getItem($key);
+        return $item->isHit();
+    }
+
     public function get(ServerRequestInterface $request): ?string
     {
         $key = $this->getCacheKey($request);
