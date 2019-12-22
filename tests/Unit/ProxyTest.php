@@ -23,4 +23,17 @@ final class ProxyTest extends SimpleTestCase
         $this->proxy = null;
         parent::tearDown();
     }
+
+    public function testUncachedResponseReceived(): void
+    {
+        $request = m::mock('Psr\Http\Message\RequestInterface');
+        $request->shouldReceive('hasHeader')->with('Cache-Control')->once()->andReturn(false);
+        $request->shouldReceive('hasHeader')->with('Expires')->once()->andReturn(false);
+        $request->shouldReceive('hasHeader')->with('ETag')->once()->andReturn(false);
+        $request->shouldReceive('hasHeader')->with('Last-Modified')->once()->andReturn(false);
+        $response = m::mock('Psr\Http\Message\ResponseInterface');
+        $this->proxy->get($request, function ($request) use ($response) {
+            return $response;
+        });
+    }
 }
