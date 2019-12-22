@@ -22,10 +22,12 @@ final class Proxy
 
     public function get(RequestInterface $request, callable $callback): ResponseInterface
     {
-        if (!$request->hasHeader('Cache-Control')
+        if (
+            !$request->hasHeader('Cache-Control')
             && !$request->hasHeader('Expires')
             && !$request->hasHeader('ETag')
-            && !$request->hasHeader('Last-Modified')) {
+            && !$request->hasHeader('Last-Modified')
+        ) {
             return $callback($request);
         }
     }
