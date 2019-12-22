@@ -23,7 +23,7 @@ final class Proxy
     public function get(RequestInterface $request, callable $callback): ResponseInterface
     {
         // check if method is cacheable
-        if ($request->getMethod() != 'GET') {
+        if (!in_array($request->getMethod(), ['GET', 'HEAD'])) {
             return $callback($request);
         }
 
