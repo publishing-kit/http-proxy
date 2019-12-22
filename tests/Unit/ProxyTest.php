@@ -24,9 +24,25 @@ final class ProxyTest extends SimpleTestCase
         parent::tearDown();
     }
 
+    public function testNotGet()
+    {
+        $request = m::mock('Psr\Http\Message\ServerRequestInterface');
+        $request->shouldReceive('getMethod')
+            ->once()
+            ->andReturn('POST');
+        $response = m::mock('Psr\Http\Message\ResponseInterface');
+        $result = $this->proxy->get($request, function ($request) use ($response) {
+            return $response;
+        });
+        $this->assertSame($result, $response);
+    }
+
     public function testUncachedResponseReceived(): void
     {
         $request = m::mock('Psr\Http\Message\RequestInterface');
+        $request->shouldReceive('getMethod')
+            ->once()
+            ->andReturn('GET');
         $response = m::mock('Psr\Http\Message\ResponseInterface');
         $result = $this->proxy->get($request, function ($request) use ($response) {
             return $response;
