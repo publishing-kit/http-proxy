@@ -10,43 +10,19 @@ use PublishingKit\HttpProxy\Proxy;
 
 final class ProxyTest extends SimpleTestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->store = m::mock('PublishingKit\HttpProxy\Contracts\StoreInterface');
-        $this->proxy = new Proxy($this->store);
-    }
-
-    public function tearDown(): void
-    {
-        $this->store = null;
-        $this->proxy = null;
-        parent::tearDown();
-    }
-
     public function testNotGet()
     {
-        $request = m::mock('Psr\Http\Message\ServerRequestInterface');
-        $request->shouldReceive('getMethod')
-            ->once()
-            ->andReturn('POST');
+        $request = m::spy('Psr\Http\Message\ServerRequestInterface');
         $response = m::mock('Psr\Http\Message\ResponseInterface');
-        $result = $this->proxy->get($request, function ($request) use ($response) {
-            return $response;
-        });
-        $this->assertSame($result, $response);
-    }
-
-    public function testUncachedResponseReceived(): void
-    {
-        $request = m::mock('Psr\Http\Message\RequestInterface');
-        $request->shouldReceive('getMethod')
+        $client = m::mock('Http\Client\HttpClient');
+        $client->shouldReceive('sendRequest')
+            ->with($request)
             ->once()
-            ->andReturn('GET');
-        $response = m::mock('Psr\Http\Message\ResponseInterface');
-        $result = $this->proxy->get($request, function ($request) use ($response) {
-            return $response;
-        });
+            ->andReturn($response);
+        $cache = m::mock('Psr\Cache\CacheItemPoolInterface');
+        $streamFactory = m::mock('Http\Message\StreamFactory');
+        $proxy = new Proxy($client, $cache, $streamFactory);
+        $result = $proxy->handle($request);
         $this->assertSame($result, $response);
     }
 }
