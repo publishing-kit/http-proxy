@@ -7,25 +7,7 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-**Note:** Replace ```Matthew Daly``` ```matthewbdaly``` ```https://matthewdaly.co.uk``` ```450801+matthewbdaly@users.noreply.github.com``` ```publishing-kit``` ```http-proxy``` ```PSR7-compliant HTTP caching proxy``` with their correct values in [README.md](README.md), [CHANGELOG.md](CHANGELOG.md), [CONTRIBUTING.md](CONTRIBUTING.md), [LICENSE.md](LICENSE.md) and [composer.json](composer.json) files, then delete this line. You can run `$ php prefill.php` in the command line to make all replacements at once. Delete the file prefill.php as well.
-
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what
-PSRs you support to avoid any confusion with users and contributors.
-
-## Structure
-
-If any of the following are applicable to your project, then the directory structure should follow industry best practices by being named the following.
-
-```
-bin/        
-build/
-docs/
-config/
-src/
-tests/
-vendor/
-```
-
+PublishingKit/http-proxy is a simple reverse caching HTTP proxy. Rather than doing any actual caching itself, it's instead implemented as a very simple HTTPlug client, which is wrapped in the HTTPlug caching plugin.
 
 ## Install
 
@@ -37,9 +19,17 @@ $ composer require publishing-kit/http-proxy
 
 ## Usage
 
+Assuming the following:
+
+* `$app` is a callable (can be a function, or a class with the `__invoke()` magic method defined) that accepts a PSR7 request object as its sole argument
+* `$cache` is an instance of `Psr\Cache\CacheItemPoolInterface`
+* `$streamFactory` is an HTTPlug stream factory implementation
+
 ``` php
-$skeleton = new PublishingKit\HttpProxy();
-echo $skeleton->echoPhrase('Hello, League!');
+$app = new App();
+$client = new PublishingKit\HttpProxy\Client($app);
+$proxy = new PublishingKit\HttpProxy\Proxy($client, $cache, $streamFactory);
+$response = $proxy->handle($request);
 ```
 
 ## Change log
