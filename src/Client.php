@@ -30,6 +30,7 @@ final class Client implements HttpClient
      */
     public function sendRequest(RequestInterface $request): ResponseInterface
     {
-        return $this->callback($request);
+        $callback = $this->callback;
+        return $callback($request);
     }
 }
