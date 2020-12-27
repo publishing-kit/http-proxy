@@ -11,10 +11,13 @@ use Psr\Http\Message\ResponseInterface;
 final class Client implements HttpClient
 {
     /**
-     * @var callable
+     * @var callable(RequestInterface): ResponseInterface
      */
     private $callback;
 
+    /**
+     * @psalm-param callable(RequestInterface): ResponseInterface $callback
+     */
     public function __construct(callable $callback)
     {
         $this->callback = $callback;
