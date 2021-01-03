@@ -20,7 +20,7 @@ final class ProxyTest extends SimpleTestCase
             ->once()
             ->andReturn($response);
         $cache = m::mock('Psr\Cache\CacheItemPoolInterface');
-        $streamFactory = m::mock('Http\Message\StreamFactory');
+        $streamFactory = m::mock('Psr\Http\Message\StreamFactoryInterface');
         $proxy = new Proxy($client, $cache, $streamFactory);
         $result = $proxy->handle($request);
         $this->assertSame($result, $response);

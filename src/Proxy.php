@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace PublishingKit\HttpProxy;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Cache\CacheItemPoolInterface;
-use Http\Client\HttpClient;
 use Http\Client\Common\PluginClient;
 use Http\Client\Common\Plugin\CachePlugin;
-use Http\Message\StreamFactory;
+use Http\Client\HttpClient;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 final class Proxy
 {
@@ -25,11 +25,11 @@ final class Proxy
     private $cache;
 
     /**
-     * @var StreamFactory
+     * @var StreamFactoryInterface
      */
     private $streamFactory;
 
-    public function __construct(HttpClient $client, CacheItemPoolInterface $cache, StreamFactory $streamFactory)
+    public function __construct(HttpClient $client, CacheItemPoolInterface $cache, StreamFactoryInterface $streamFactory)
     {
         $this->client = $client;
         $this->cache = $cache;
