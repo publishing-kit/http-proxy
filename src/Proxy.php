@@ -29,8 +29,11 @@ final class Proxy
      */
     private $streamFactory;
 
-    public function __construct(HttpClient $client, CacheItemPoolInterface $cache, StreamFactoryInterface $streamFactory)
-    {
+    public function __construct(
+        HttpClient $client,
+        CacheItemPoolInterface $cache,
+        StreamFactoryInterface $streamFactory
+    ) {
         $this->client = $client;
         $this->cache = $cache;
         $this->streamFactory = $streamFactory;

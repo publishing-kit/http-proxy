@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "php": "~7.2",
+        "php": ">=7.4",
         "php-http/cache-plugin": "^1.7",
         "php-http/httplug": "^2.1",
         "php-http/message": "^1.8",
